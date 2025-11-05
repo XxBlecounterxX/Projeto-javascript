@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loja de Bicicletas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #e8f5e9;
+    }
+    header {
+      background: #2e7d32;
+      color: white;
+      text-align: center;
+      padding: 40px 10px;
+    }
+    nav {
+      background: #1b5e20;
+      text-align: center;
+      padding: 10px 0;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    section {
+      text-align: center;
+      padding: 40px 20px;
+    }
+    section img {
+      width: 300px;
+      border-radius: 10px;
+    }
+    footer {
+      background: #2e7d32;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Pedalaria</h1>
+    <p>As melhores bicicletas para todas as aventuras!</p>
+  </header>
+
+  <nav>
+    <a href="#">Início</a>
+    <a href="#">Produtos</a>
+    <a href="#">Sobre</a>
+    <a href="#">Contato</a>
+  </nav>
+
+  <section>
+    <h2>Bem-vindo à nossa loja</h2>
+    <p>Aqui você encontra bicicletas urbanas, esportivas e elétricas.</p>
+    <img src="https://images.unsplash.com/photo-1518655048521-f130df041f66?auto=format&fit=crop&w=800&q=60" alt="Bicicleta em destaque">
+    <p><strong>Promoção:</strong> Frete grátis acima de R$ 1.000!</p>
+  </section>
+
+  <footer>
+    &copy; <span id="ano"></span> Pedalaria — Sua loja de bicicletas
+  </footer>
+
+  <script>
+    document.getElementById("ano").textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
