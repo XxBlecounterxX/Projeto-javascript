@@ -6,101 +6,13 @@
   <title>Pedalaria — Encontre sua Bicicleta</title>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#071014;
-      --accent:#10b981; /* emerald */
-      --muted:rgba(255,255,255,0.75);
-      --glass: rgba(255,255,255,0.06);
-      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      background:var(--bg);
-      color:#fff;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-    }
-
-    /* Hero */
-    .hero{
-      min-height:100vh;
-      display:flex;
-      flex-direction:column;
-    }
-    nav{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:20px 28px;
-      z-index:10;
-    }
-    .brand{display:flex;align-items:center;gap:12px}
-    .logo{width:48px;height:48px;border-radius:8px;background:linear-gradient(135deg,#fff3,#ffffff0a);display:flex;align-items:center;justify-content:center}
-    .logo svg{width:26px;height:26px;fill:var(--accent)}
-    .brand span{font-weight:700;font-size:18px}
-
-    .nav-links{display:flex;gap:18px;align-items:center}
-    .nav-links a{color:var(--muted);text-decoration:none;font-weight:600}
-    .cta-btn{background:var(--accent);color:#042018;border:none;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer}
-
-    /* Background */
-    .hero-bg{
-      position:relative;flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden
-    }
-    .hero-bg::before{
-      content:"";
-      position:absolute;inset:0;
-      background-image: url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1600&q=80');
-      background-size:cover;background-position:center;
-      filter:brightness(0.55) saturate(1.05);
-      z-index:0;
-      transform:scale(1.03);
-    }
-    .gradient{
-      position:absolute;inset:0;background:linear-gradient(90deg, rgba(2,6,23,0.85) 0%, rgba(2,6,23,0.35) 40%, rgba(2,6,23,0) 100%);
-      z-index:1;
-    }
-
-    /* Content */
-    .container{position:relative;z-index:2;max-width:1200px;width:100%;padding:40px 28px;margin:0 auto;display:flex;gap:32px;align-items:center}
-    .hero-left{flex:1}
-    .badge{display:inline-block;padding:8px 12px;border-radius:999px;background:var(--accent);color:#042018;font-weight:700;margin-bottom:18px}
-    h1{font-size:40px;line-height:1.03;margin:0 0 16px;font-weight:800}
-    p.lead{margin:0 0 22px;color:var(--muted);max-width:60ch;font-size:17px}
-    .actions{display:flex;gap:12px;flex-wrap:wrap}
-
-    /* Product card */
-    .card{width:340px;background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));border-radius:18px;padding:14px;border:1px solid rgba(255,255,255,0.06);backdrop-filter: blur(6px)}
-    .card img{width:100%;height:200px;object-fit:cover;border-radius:12px}
-    .card h3{margin:12px 0 4px;font-size:20px}
-    .card p{margin:0;color:var(--muted);font-size:14px}
-    .price-row{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
-    .price{font-weight:800}
-
-    footer{padding:18px 28px;text-align:center;color:rgba(255,255,255,0.6);font-size:14px}
-
-    /* Responsive */
-    @media (max-width:900px){
-      .container{flex-direction:column;align-items:flex-start;padding:28px}
-      .card{width:100%}
-      h1{font-size:32px}
-    }
-
-    @media (max-width:560px){
-      nav{padding:14px}
-      .nav-links{display:none}
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="hero">
     <nav>
       <div class="brand">
         <div class="logo" aria-hidden="true">
-          <!-- simple bike icon -->
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M5 16a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm14 0a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM2 12h3l3-6h8l3 6h3"/>
           </svg>
@@ -108,14 +20,19 @@
         <span>Pedalaria</span>
       </div>
 
-      <div class="nav-links" role="navigation" aria-label="menu principal">
+      <div class="nav-links" id="nav-menu" role="navigation" aria-label="menu principal">
         <a href="#produtos">Produtos</a>
         <a href="#sobre">Sobre</a>
         <a href="#contato">Contato</a>
         <button class="cta-btn">Entrar</button>
       </div>
 
-      <button aria-label="abrir menu" onclick="alert('Menu móvel - implemente aqui')" style="background:var(--glass);border:0;padding:8px 10px;border-radius:10px;color:var(--muted);display:none">☰</button>
+      <button id="menu-toggle" aria-label="abrir menu" style="background:var(--glass);border:0;padding:8px 10px;border-radius:10px;color:var(--muted);display:none">☰</button>
+
+      <button id="carrinho-btn" style="background:var(--glass);border:0;padding:8px 10px;border-radius:10px;color:var(--muted);cursor:pointer;position:relative">
+        🛒
+        <span id="carrinho-count" style="position:absolute;top:-8px;right:-8px;background:var(--accent);color:#042018;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;display:none">0</span>
+      </button>
     </nav>
 
     <div class="hero-bg">
@@ -147,7 +64,7 @@
 
           <div class="price-row">
             <div>
-              <div class="price">R$ 3.499,00</div>
+              <div class="price">R$ 3.499,00</div>
               <div style="font-size:13px;color:var(--muted)">ou 10x sem juros</div>
             </div>
             <div>
@@ -161,9 +78,109 @@
     <footer>© <span id="year"></span> Pedalaria — criamos experiências sobre duas rodas</footer>
   </header>
 
+  <!-- SEÇÃO DE PRODUTOS -->
+  <section id="produtos" style="padding: 60px 28px; background: var(--bg);">
+    <div class="container" style="flex-direction: column; align-items: flex-start;">
+      <h2 style="font-size: 32px; margin-bottom: 32px; width: 100%;">Nossos Destaques</h2>
+      
+      <!-- FILTROS -->
+      <div class="filtros-container">
+        <div class="filtro">
+          <label for="busca">🔍 Buscar:</label>
+          <input type="text" id="busca" placeholder="Digite o nome da bike...">
+        </div>
+
+        <div class="filtro">
+          <label for="tipo-filtro">📊 Tipo:</label>
+          <select id="tipo-filtro">
+            <option value="">Todos os tipos</option>
+            <option value="urbana">Urbana</option>
+            <option value="mountain">Mountain Bike</option>
+            <option value="electrica">Elétrica</option>
+            <option value="speed">Speed</option>
+          </select>
+        </div>
+
+        <div class="filtro">
+          <label for="preco-filtro">💰 Preço máximo:</label>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <input type="range" id="preco-filtro" min="0" max="10000" step="100" value="10000" style="flex: 1;">
+            <span id="preco-valor">R$ 10.000</span>
+          </div>
+        </div>
+
+        <div class="filtro">
+          <label for="ordenacao">↕️ Ordenar por:</label>
+          <select id="ordenacao">
+            <option value="relevancia">Relevância</option>
+            <option value="preco-asc">Menor preço</option>
+            <option value="preco-desc">Maior preço</option>
+            <option value="novo">Mais novo</option>
+            <option value="avaliacao">Melhor avaliado</option>
+          </select>
+        </div>
+
+        <button id="limpar-filtros" style="background: transparent; border: 1px solid rgba(255,255,255,0.2); color: var(--muted); padding: 8px 16px; border-radius: 10px; cursor: pointer; font-weight: 600;">Limpar filtros</button>
+      </div>
+
+      <div id="resultados-texto" style="color: var(--muted); margin-bottom: 20px; width: 100%;">Carregando produtos...</div>
+
+      <!-- GRID DE PRODUTOS -->
+      <div id="products-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; width: 100%;">
+        <!-- Produtos carregados via JavaScript -->
+      </div>
+
+      <div id="sem-resultados" style="text-align: center; color: var(--muted); margin-top: 40px; display: none; width: 100%;">
+        <p style="font-size: 18px;">Nenhum produto encontrado com esses filtros.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODAL DO CARRINHO -->
+  <div id="modal-carrinho" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Seu Carrinho</h2>
+        <button id="fechar-modal" style="background: none; border: none; font-size: 24px; cursor: pointer; color: var(--muted);">✕</button>
+      </div>
+
+      <div id="carrinho-itens" style="max-height: 400px; overflow-y: auto;">
+        <!-- Itens do carrinho -->
+      </div>
+
+      <div id="carrinho-vazio" style="text-align: center; padding: 40px; color: var(--muted);">
+        Seu carrinho está vazio
+      </div>
+
+      <div id="resumo-carrinho" style="display: none; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 16px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span>Subtotal:</span>
+          <span id="subtotal">R$ 0,00</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span>Frete:</span>
+          <span id="frete">Grátis</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 16px; font-weight: 700; font-size: 18px;">
+          <span>Total:</span>
+          <span id="total">R$ 0,00</span>
+        </div>
+        <button id="btn-checkout" class="cta-btn" style="width: 100%; padding: 12px; font-size: 16px;">Ir para checkout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTIFICAÇÕES -->
+  <div id="notificacoes"></div>
+
   <script>
-    // atualiza o ano no rodapé
+    // Atualiza o ano no rodapé
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
+
+  <script src="produtos.js"></script>
+  <script src="carrinho.js"></script>
+  <script src="filtros.js"></script>
+  <script src="menu.js"></script>
 </body>
 </html>
