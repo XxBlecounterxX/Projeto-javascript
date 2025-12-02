@@ -166,13 +166,18 @@ function renderizarCarrinho() {
   document.getElementById('frete').textContent = frete === 0 ? 'Grátis' : `R$ ${frete.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
   document.getElementById('total').textContent = `R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
 
-  // Botão checkout
-  document.getElementById('btn-checkout').addEventListener('click', () => {
+// Botão checkout
+const btnCheckoutElement = document.getElementById('btn-checkout');
+if (btnCheckoutElement && !btnCheckoutElement.dataset.listenerAdicionado) {
+  btnCheckoutElement.addEventListener('click', () => {
+    fecharCarrinho();
     mostrarNotificacao('Redirecionando para checkout...', 'sucesso');
     setTimeout(() => {
-      alert('Checkout integrado\n\nEm um projeto real, isso levaria você para uma página de pagamento com Stripe/PayPal.');
+      window.location.href = 'checkout.html';
     }, 1000);
   });
+  btnCheckoutElement.dataset.listenerAdicionado = 'true';
+}
 }
 
 function atualizarContadorCarrinho() {
