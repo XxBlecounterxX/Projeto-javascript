@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderizarProdutos();
   atualizarResumo();
   verificarAutenticacao();
+  configurarBotoes();
 });
 
 function renderizarProdutos() {
@@ -89,11 +90,27 @@ function verificarAutenticacao() {
     // Usuário não está logado
     usuarioLogadoDiv.style.display = 'none';
     usuarioNaoLogadoDiv.style.display = 'block';
-
-    // Configurar botões de login/registro
-    btnLoginCheckout.addEventListener('click', fazerLoginCheckout);
-    btnRegistroCheckout.addEventListener('click', fazerRegistroCheckout);
   }
+}
+
+// CONFIGURAR TODOS OS BOTÕES
+function configurarBotoes() {
+  // Botões das opções iniciais
+  document.querySelector('.btn-login').addEventListener('click', mostrarLogin);
+  document.querySelector('.btn-registro').addEventListener('click', mostrarRegistro);
+  
+  // Botão de login
+  btnLoginCheckout.addEventListener('click', fazerLoginCheckout);
+  
+  // Botão de registro
+  btnRegistroCheckout.addEventListener('click', fazerRegistroCheckout);
+  
+  // Botões de voltar
+  document.querySelectorAll('.btn-voltar').forEach(btn => {
+    if (btn.textContent.includes('Voltar')) {
+      btn.addEventListener('click', voltarOpcoes);
+    }
+  });
 }
 
 // FUNÇÕES DE NAVEGAÇÃO
