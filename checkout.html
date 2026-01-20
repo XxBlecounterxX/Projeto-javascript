@@ -1,320 +1,380 @@
-const API_URL = 'http://localhost:5000/api';
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Checkout • Pedalaria</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .checkout-container {
+      max-width: 800px;
+      margin: 60px auto;
+      padding: 20px;
+    }
 
-// Elementos
-const produtosCheckout = document.getElementById('produtos-checkout');
-const btnFinalizar = document.getElementById('btn-finalizar');
-const notificacao = document.getElementById('notificacao-checkout');
-const modalConfirmacao = document.getElementById('modal-confirmacao');
+    .card-checkout {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+      border-radius: 18px;
+      padding: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(6px);
+      margin-bottom: 20px;
+    }
 
-// Elementos de autenticação
-const usuarioLogadoDiv = document.getElementById('usuario-logado');
-const usuarioNaoLogadoDiv = document.getElementById('usuario-nao-logado');
-const emailUsuarioLogado = document.getElementById('email-usuario-logado');
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
 
-// Elementos de opções
-const opcoesIniciais = document.getElementById('opcoes-iniciais');
-const formLogin = document.getElementById('form-login-checkout');
-const formRegistro = document.getElementById('form-registro-checkout');
+    .produto-checkout {
+      display: flex;
+      gap: 12px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
 
-// Campos de login
-const emailLogin = document.getElementById('email-login');
-const senhaLogin = document.getElementById('senha-login');
-const btnLoginCheckout = document.getElementById('btn-login-checkout');
+    .produto-checkout img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
 
-// Campos de registro
-const emailRegistro = document.getElementById('email-registro');
-const senhaRegistro = document.getElementById('senha-registro');
-const confirmarSenha = document.getElementById('confirmar-senha');
-const btnRegistroCheckout = document.getElementById('btn-registro-checkout');
+    .produto-checkout-info {
+      flex: 1;
+    }
 
-// Verificar carrinho e autenticação
-document.addEventListener('DOMContentLoaded', () => {
-  if (carrinho.itens.length === 0) {
-    alert('Carrinho vazio!');
-    window.location.href = 'index.html';
-    return;
-  }
+    .produto-checkout-nome {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
 
-  renderizarProdutos();
-  atualizarResumo();
-  verificarAutenticacao();
-  configurarBotoes();
-});
+    .produto-checkout-preco {
+      color: var(--muted);
+      font-size: 14px;
+    }
 
-function renderizarProdutos() {
-  produtosCheckout.innerHTML = '';
+    .form-group-checkout {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
 
-  carrinho.itens.forEach(item => {
-    const div = document.createElement('div');
-    div.className = 'produto-checkout';
-    div.innerHTML = `
-      <img src="${item.imagem}" alt="${item.nome}">
-      <div class="produto-checkout-info">
-        <div class="produto-checkout-nome">${item.nome}</div>
-        <div class="produto-checkout-preco">
-          ${item.quantidade}x R$ ${item.preco.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+    .form-group-checkout label {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .form-group-checkout input {
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+    }
+
+    .form-group-checkout input:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .resumo-pedido {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      margin-bottom: 16px;
+    }
+
+    .resumo-linha {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .resumo-total {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .btn-pagar {
+      background: var(--accent);
+      color: #042018;
+      border: none;
+      padding: 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+      transition: transform 0.2s;
+      margin-bottom: 12px;
+    }
+
+    .btn-pagar:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-pagar:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .btn-voltar {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--muted);
+      padding: 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      width: 100%;
+      transition: border-color 0.3s;
+    }
+
+    .btn-voltar:hover {
+      border-color: var(--accent);
+    }
+
+    .notificacao-checkout {
+      padding: 12px 16px;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 14px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .notificacao-checkout.erro {
+      background: rgba(239, 68, 68, 0.1);
+      border-left: 4px solid #ef4444;
+      display: block;
+    }
+
+    .notificacao-checkout.sucesso {
+      background: rgba(16, 185, 129, 0.1);
+      border-left: 4px solid var(--accent);
+      display: block;
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.ativo {
+      display: flex;
+    }
+
+    .modal-content {
+      max-width: 400px;
+      position: relative;
+    }
+
+    .modal-fechar {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .login-options {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .login-options button {
+      flex: 1;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .btn-login {
+      background: var(--accent);
+      color: #042018;
+    }
+
+    .btn-registro {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .usuario-info {
+      background: rgba(16, 185, 129, 0.1);
+      border-left: 4px solid var(--accent);
+      padding: 16px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+    }
+
+    .usuario-info p {
+      margin: 0;
+      color: var(--accent);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <nav style="padding: 20px 28px; display: flex; align-items: center; justify-content: space-between;">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M5 16a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm14 0a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM2 12h3l3-6h8l3 6h3"/>
+        </svg>
+      </div>
+      <span>Pedalaria</span>
+    </div>
+    <button class="btn-voltar" onclick="voltarCarrinho()" style="width: auto; padding: 8px 16px;">← Voltar</button>
+  </nav>
+
+  <div class="checkout-container">
+    <!-- CARRINHO -->
+    <div class="card-checkout">
+      <div class="section-title">Seu Carrinho</div>
+      <div id="produtos-checkout"></div>
+    </div>
+
+    <!-- RESUMO -->
+    <div class="card-checkout">
+      <div class="section-title">Resumo do Pedido</div>
+      <div class="resumo-pedido">
+        <div class="resumo-linha">
+          <span>Subtotal:</span>
+          <span id="resumo-subtotal">R$ 0,00</span>
+        </div>
+        <div class="resumo-linha">
+          <span>Frete:</span>
+          <span id="resumo-frete">Grátis</span>
+        </div>
+        <div class="resumo-total">
+          <span>Total:</span>
+          <span id="resumo-total">R$ 0,00</span>
         </div>
       </div>
-      <div style="font-weight: 700; text-align: right;">
-        R$ ${(item.preco * item.quantidade).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+    </div>
+
+    <!-- AUTENTICAÇÃO -->
+    <div class="card-checkout">
+      <div class="section-title">Pagamento</div>
+
+      <div id="notificacao-checkout" class="notificacao-checkout"></div>
+
+      <!-- SE USUÁRIO JÁ ESTIVER LOGADO -->
+      <div id="usuario-logado" style="display: none;">
+        <div class="usuario-info">
+          <p>✅ Você está logado como: <span id="email-usuario-logado"></span></p>
+        </div>
+        <button id="btn-finalizar" class="btn-pagar">Finalizar Compra</button>
       </div>
-    `;
-    produtosCheckout.appendChild(div);
-  });
-}
 
-function atualizarResumo() {
-  const subtotal = carrinho.obterSubtotal();
-  const frete = carrinho.obterFrete();
-  const total = carrinho.obterTotal();
+      <!-- SE USUÁRIO NÃO ESTIVER LOGADO -->
+      <div id="usuario-nao-logado">
+        <!-- OPÇÕES INICIAIS -->
+        <div id="opcoes-iniciais">
+          <p style="color: var(--muted); margin-bottom: 16px;">Faça login ou registre-se para finalizar sua compra:</p>
+          <div class="login-options">
+            <button class="btn-login">Já tenho conta</button>
+            <button class="btn-registro">Criar conta</button>
+          </div>
+        </div>
 
-  document.getElementById('resumo-subtotal').textContent = `R$ ${subtotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
-  document.getElementById('resumo-frete').textContent = frete === 0 ? 'Grátis' : `R$ ${frete.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
-  document.getElementById('resumo-total').textContent = `R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
-}
+        <!-- FORMULÁRIO DE LOGIN -->
+        <div id="form-login-checkout" style="display: none;">
+          <div class="form-group-checkout">
+            <label for="email-login">Email (Gmail)</label>
+            <input type="email" id="email-login" placeholder="seu@gmail.com">
+          </div>
 
-function verificarAutenticacao() {
-  const email = localStorage.getItem('email');
+          <div class="form-group-checkout">
+            <label for="senha-login">Senha</label>
+            <input type="password" id="senha-login" placeholder="••••••••">
+          </div>
 
-  if (email) {
-    // Usuário já está logado
-    usuarioLogadoDiv.style.display = 'block';
-    usuarioNaoLogadoDiv.style.display = 'none';
-    emailUsuarioLogado.textContent = email;
+          <button id="btn-login-checkout" class="btn-pagar">Entrar</button>
+          <button class="btn-voltar" style="width: 100%; margin-top: 8px;">← Voltar</button>
+        </div>
 
-    // Configurar botão de finalizar
-    btnFinalizar.addEventListener('click', finalizarCompra);
-  } else {
-    // Usuário não está logado
-    usuarioLogadoDiv.style.display = 'none';
-    usuarioNaoLogadoDiv.style.display = 'block';
-  }
-}
+        <!-- FORMULÁRIO DE REGISTRO -->
+        <div id="form-registro-checkout" style="display: none;">
+          <div class="form-group-checkout">
+            <label for="email-registro">Email (Gmail)</label>
+            <input type="email" id="email-registro" placeholder="seu@gmail.com">
+          </div>
 
-// CONFIGURAR TODOS OS BOTÕES
-function configurarBotoes() {
-  // Botões das opções iniciais
-  document.querySelector('.btn-login').addEventListener('click', mostrarLogin);
-  document.querySelector('.btn-registro').addEventListener('click', mostrarRegistro);
-  
-  // Botão de login
-  btnLoginCheckout.addEventListener('click', fazerLoginCheckout);
-  
-  // Botão de registro
-  btnRegistroCheckout.addEventListener('click', fazerRegistroCheckout);
-  
-  // Botões de voltar
-  document.querySelectorAll('.btn-voltar').forEach(btn => {
-    btn.addEventListener('click', voltarOpcoes);
-  });
-}
+          <div class="form-group-checkout">
+            <label for="senha-registro">Senha</label>
+            <input type="password" id="senha-registro" placeholder="••••••••">
+          </div>
 
-// FUNÇÕES DE NAVEGAÇÃO
-function mostrarLogin() {
-  opcoesIniciais.style.display = 'none';
-  formLogin.style.display = 'block';
-  formRegistro.style.display = 'none';
-}
+          <div class="form-group-checkout">
+            <label for="confirmar-senha">Confirmar Senha</label>
+            <input type="password" id="confirmar-senha" placeholder="••••••••">
+          </div>
 
-function mostrarRegistro() {
-  opcoesIniciais.style.display = 'none';
-  formLogin.style.display = 'none';
-  formRegistro.style.display = 'block';
-}
+          <button id="btn-registro-checkout" class="btn-pagar">Criar Conta</button>
+          <button class="btn-voltar" style="width: 100%; margin-top: 8px;">← Voltar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-function voltarOpcoes() {
-  opcoesIniciais.style.display = 'block';
-  formLogin.style.display = 'none';
-  formRegistro.style.display = 'none';
-}
+  <!-- MODAL DE CONFIRMAÇÃO -->
+  <div id="modal-confirmacao" class="modal-overlay">
+    <div class="card-checkout">
+      <button class="modal-fechar" onclick="fecharModal()">✕</button>
 
-// LOGIN
-async function fazerLoginCheckout() {
-  const email = emailLogin.value.trim();
-  const senha = senhaLogin.value;
+      <h2 style="text-align: center; margin-top: 0;">✓ Pedido Confirmado!</h2>
 
-  if (!email || !senha) {
-    mostrarNotif('Preencha todos os campos', 'erro');
-    return;
-  }
+      <div style="background: rgba(16, 185, 129, 0.1); border-left: 4px solid var(--accent); padding: 16px; border-radius: 10px; margin-bottom: 20px;">
+        <p style="margin: 0; color: var(--accent); font-weight: 600;">Sua compra foi realizada com sucesso!</p>
+      </div>
 
-  if (!email.includes('@gmail.com')) {
-    mostrarNotif('Use um email Gmail válido', 'erro');
-    return;
-  }
+      <div style="color: var(--muted); margin-bottom: 20px; line-height: 1.8;">
+        <p><strong>Número do Pedido:</strong><br><span id="numero-pedido" style="color: var(--accent); font-weight: 600;">-</span></p>
+        <p><strong>Email:</strong><br><span id="confirmacao-email">-</span></p>
+        <p><strong>Total:</strong><br><span id="confirmacao-total" style="color: var(--accent); font-weight: 600;">-</span></p>
+        <p style="font-size: 14px; margin-top: 16px; color: rgba(255, 255, 255, 0.6);">Você receberá um email de confirmação. O pedido será entregue em 3-5 dias úteis.</p>
+      </div>
 
-  btnLoginCheckout.disabled = true;
-  btnLoginCheckout.textContent = 'Entrando...';
+      <button class="btn-pagar" onclick="voltarInicio()">Voltar para Início</button>
+    </div>
+  </div>
 
-  try {
-    const response = await fetch(`${API_URL}/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email, password: senha })
-    });
-
-    const data = await response.json();
-
-    if (!data.sucesso) {
-      mostrarNotif(data.mensagem || 'Erro ao fazer login', 'erro');
-      return;
-    }
-
-    // Salvar dados
-    localStorage.setItem('email', email);
-    localStorage.setItem('usuario_id', data.usuario.id);
-
-    mostrarNotif('Login realizado com sucesso!', 'sucesso');
-    
-    setTimeout(() => {
-      verificarAutenticacao();
-    }, 1000);
-  } catch (erro) {
-    mostrarNotif('Erro de conexão com o servidor', 'erro');
-    console.error(erro);
-  } finally {
-    btnLoginCheckout.disabled = false;
-    btnLoginCheckout.textContent = 'Entrar';
-  }
-}
-
-// REGISTRO
-async function fazerRegistroCheckout() {
-  const email = emailRegistro.value.trim();
-  const senha = senhaRegistro.value;
-  const confirmar = confirmarSenha.value;
-
-  if (!email || !senha || !confirmar) {
-    mostrarNotif('Preencha todos os campos', 'erro');
-    return;
-  }
-
-  if (!email.includes('@gmail.com')) {
-    mostrarNotif('Use um email Gmail válido', 'erro');
-    return;
-  }
-
-  if (senha.length < 6) {
-    mostrarNotif('Senha deve ter no mínimo 6 caracteres', 'erro');
-    return;
-  }
-
-  if (senha !== confirmar) {
-    mostrarNotif('As senhas não coincidem', 'erro');
-    return;
-  }
-
-  btnRegistroCheckout.disabled = true;
-  btnRegistroCheckout.textContent = 'Criando conta...';
-
-  try {
-    const response = await fetch(`${API_URL}/auth/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email, password: senha })
-    });
-
-    const data = await response.json();
-
-    if (!data.sucesso) {
-      mostrarNotif(data.mensagem || 'Erro ao criar conta', 'erro');
-      return;
-    }
-
-    // Salvar dados
-    localStorage.setItem('email', email);
-    localStorage.setItem('usuario_id', data.usuario.id);
-
-    mostrarNotif('Conta criada com sucesso!', 'sucesso');
-    
-    setTimeout(() => {
-      verificarAutenticacao();
-    }, 1000);
-  } catch (erro) {
-    mostrarNotif('Erro de conexão com o servidor', 'erro');
-    console.error(erro);
-  } finally {
-    btnRegistroCheckout.disabled = false;
-    btnRegistroCheckout.textContent = 'Criar Conta';
-  }
-}
-
-// FINALIZAR COMPRA
-async function finalizarCompra() {
-  const email = localStorage.getItem('email');
-
-  btnFinalizar.disabled = true;
-  btnFinalizar.textContent = 'Processando...';
-
-  try {
-    const response = await fetch(`${API_URL}/pedidos/criar`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        usuario_email: email,
-        itens: carrinho.itens,
-        total: carrinho.obterTotal()
-      })
-    });
-
-    const data = await response.json();
-
-    if (!data.sucesso) {
-      mostrarNotif(data.mensagem || 'Erro ao criar pedido', 'erro');
-      return;
-    }
-
-    // Pré-preencher modal
-    document.getElementById('numero-pedido').textContent = data.pedido.numero;
-    document.getElementById('confirmacao-email').textContent = email;
-    document.getElementById('confirmacao-total').textContent = `R$ ${data.pedido.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
-
-    // Limpar carrinho
-    carrinho.limpar();
-
-    // Mostrar modal
-    mostrarModal();
-  } catch (erro) {
-    mostrarNotif('Erro de conexão com o servidor', 'erro');
-    console.error(erro);
-  } finally {
-    btnFinalizar.disabled = false;
-    btnFinalizar.textContent = 'Finalizar Compra';
-  }
-}
-
-function mostrarNotif(msg, tipo = 'erro') {
-  notificacao.textContent = msg;
-  notificacao.className = `notificacao-checkout ${tipo}`;
-
-  setTimeout(() => {
-    notificacao.className = 'notificacao-checkout';
-  }, 4000);
-}
-
-function mostrarModal() {
-  modalConfirmacao.classList.add('ativo');
-}
-
-function fecharModal() {
-  modalConfirmacao.classList.remove('ativo');
-}
-
-function voltarCarrinho() {
-  if (confirm('Deseja voltar? Os dados serão perdidos.')) {
-    window.location.href = 'index.html';
-  }
-}
-
-function voltarInicio() {
-  window.location.href = 'index.html';
-}
-
-// Inicializar
-voltarOpcoes();
+  <script src="carrinho.js"></script>
+  <script src="checkout-novo.js"></script>
+</body>
+</html>
