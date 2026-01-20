@@ -91,38 +91,66 @@ function verificarAutenticacao() {
   }
 }
 
-// CONFIGURAR TODOS OS BOTÕES
+// CONFIGURAR TODOS OS BOTÕES - VERSÃO SIMPLIFICADA
 function configurarBotoes() {
-  // Botões das opções iniciais
-  document.querySelector('.btn-login').addEventListener('click', mostrarLogin);
-  document.querySelector('.btn-registro').addEventListener('click', mostrarRegistro);
+  console.log('Configurando botões...');
+  
+  // Botões das opções iniciais - USANDO ID
+  const btnLoginInicial = document.querySelector('.btn-login');
+  const btnRegistroInicial = document.querySelector('.btn-registro');
+  
+  if (btnLoginInicial) {
+    console.log('Botão login encontrado');
+    btnLoginInicial.addEventListener('click', mostrarLogin);
+  } else {
+    console.error('Botão login NÃO encontrado!');
+  }
+  
+  if (btnRegistroInicial) {
+    console.log('Botão registro encontrado');
+    btnRegistroInicial.addEventListener('click', mostrarRegistro);
+  } else {
+    console.error('Botão registro NÃO encontrado!');
+  }
   
   // Botão de login
-  btnLoginCheckout.addEventListener('click', fazerLoginCheckout);
+  if (btnLoginCheckout) {
+    console.log('Botão login checkout encontrado');
+    btnLoginCheckout.addEventListener('click', fazerLoginCheckout);
+  }
   
   // Botão de registro
-  btnRegistroCheckout.addEventListener('click', fazerRegistroCheckout);
+  if (btnRegistroCheckout) {
+    console.log('Botão registro checkout encontrado');
+    btnRegistroCheckout.addEventListener('click', fazerRegistroCheckout);
+  }
   
   // Botões de voltar
-  document.querySelectorAll('.btn-voltar').forEach(btn => {
+  const botoesVoltar = document.querySelectorAll('.btn-voltar');
+  console.log(`Encontrados ${botoesVoltar.length} botões voltar`);
+  
+  botoesVoltar.forEach(btn => {
     btn.addEventListener('click', voltarOpcoes);
   });
 }
 
 // FUNÇÕES DE NAVEGAÇÃO
 function mostrarLogin() {
+  console.log('Mostrando login...');
   opcoesIniciais.style.display = 'none';
   formLogin.style.display = 'block';
   formRegistro.style.display = 'none';
 }
 
 function mostrarRegistro() {
+  console.log('Mostrando registro...');
   opcoesIniciais.style.display = 'none';
   formLogin.style.display = 'none';
   formRegistro.style.display = 'block';
 }
 
 function voltarOpcoes() {
+  console.log('Voltando para opções...');
   opcoesIniciais.style.display = 'block';
   formLogin.style.display = 'none';
   formRegistro.style.display = 'none';
@@ -130,6 +158,7 @@ function voltarOpcoes() {
 
 // LOGIN
 async function fazerLoginCheckout() {
+  console.log('Fazendo login...');
   const email = emailLogin.value.trim();
   const senha = senhaLogin.value;
 
@@ -182,6 +211,7 @@ async function fazerLoginCheckout() {
 
 // REGISTRO
 async function fazerRegistroCheckout() {
+  console.log('Fazendo registro...');
   const email = emailRegistro.value.trim();
   const senha = senhaRegistro.value;
   const confirmar = confirmarSenha.value;
@@ -245,6 +275,7 @@ async function fazerRegistroCheckout() {
 
 // FINALIZAR COMPRA
 async function finalizarCompra() {
+  console.log('Finalizando compra...');
   const email = localStorage.getItem('email');
 
   btnFinalizar.disabled = true;
