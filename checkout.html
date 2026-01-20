@@ -157,155 +157,66 @@
             color: #10b981;
         }
 
-        /* ÁREA DE AUTENTICAÇÃO */
-        .auth-area {
-            margin-top: 20px;
+        /* ÁREA DE PAGAMENTO SIMPLIFICADA */
+        .pagamento-simples {
+            text-align: center;
+            padding: 20px 0;
         }
 
-        .notificacao {
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            display: none;
-        }
-
-        .notificacao.erro {
-            background: rgba(239, 68, 68, 0.1);
-            border-left: 4px solid #ef4444;
-            color: #fca5a5;
-            display: block;
-        }
-
-        .notificacao.sucesso {
-            background: rgba(16, 185, 129, 0.1);
-            border-left: 4px solid #10b981;
-            color: #a7f3d0;
-            display: block;
-        }
-
-        .usuario-logado {
+        .info-pagamento {
             background: rgba(16, 185, 129, 0.1);
             border-left: 4px solid #10b981;
             padding: 15px;
             border-radius: 8px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            text-align: left;
         }
 
-        .usuario-logado p {
+        .info-pagamento p {
             color: #10b981;
             font-weight: 600;
+            margin-bottom: 10px;
         }
 
-        .opcoes-iniciais {
-            text-align: center;
-            padding: 20px;
-        }
-
-        .opcoes-iniciais p {
-            color: #94a3b8;
-            margin-bottom: 20px;
-        }
-
-        .botoes-opcoes {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-        }
-
-        .btn-opcao {
-            padding: 12px 24px;
-            border-radius: 8px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 14px;
-        }
-
-        .btn-login {
-            background: #10b981;
-            color: #0f172a;
-        }
-
-        .btn-registro {
-            background: #475569;
-            color: #f8fafc;
-        }
-
-        .btn-opcao:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .formulario {
-            display: none;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
+        .info-pagamento ul {
             color: #cbd5e1;
+            padding-left: 20px;
             font-size: 14px;
-            font-weight: 500;
+            line-height: 1.6;
         }
 
-        .form-group input {
+        .info-pagamento li {
+            margin-bottom: 8px;
+        }
+
+        .btn-pagar {
             width: 100%;
-            padding: 12px;
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid #475569;
-            border-radius: 8px;
-            color: #f8fafc;
-            font-size: 14px;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #10b981;
-        }
-
-        .btn-form {
-            width: 100%;
-            padding: 14px;
+            padding: 16px;
             background: #10b981;
             color: #0f172a;
             border: none;
-            border-radius: 8px;
-            font-weight: 600;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
             cursor: pointer;
-            font-size: 16px;
-            margin-top: 10px;
             transition: all 0.3s;
+            margin-top: 10px;
         }
 
-        .btn-form:hover {
+        .btn-pagar:hover {
             background: #0da271;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
         }
 
-        .btn-form:disabled {
+        .btn-pagar:disabled {
             opacity: 0.6;
             cursor: not-allowed;
+            transform: none;
         }
 
-        .btn-voltar-form {
-            width: 100%;
-            padding: 12px;
-            background: transparent;
-            border: 1px solid #475569;
-            color: #94a3b8;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: all 0.3s;
-        }
-
-        .btn-voltar-form:hover {
-            border-color: #10b981;
-            color: #10b981;
+        .btn-pagar.processando {
+            background: #475569;
         }
 
         /* MODAL DE CONFIRMAÇÃO */
@@ -398,10 +309,6 @@
             .checkout-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .botoes-opcoes {
-                flex-direction: column;
-            }
         }
     </style>
 </head>
@@ -422,7 +329,7 @@
                 <div id="produtos-lista"></div>
             </div>
 
-            <!-- COLUNA DIREITA - PAGAMENTO -->
+            <!-- COLUNA DIREITA - PAGAMENTO SIMPLIFICADO -->
             <div class="pagamento-section">
                 <h2 class="section-title">Resumo do Pedido</h2>
                 
@@ -441,61 +348,21 @@
                     </div>
                 </div>
 
-                <!-- ÁREA DE AUTENTICAÇÃO -->
-                <div class="auth-area">
-                    <div id="notificacao" class="notificacao"></div>
-
-                    <!-- USUÁRIO LOGADO -->
-                    <div id="usuario-logado" style="display: none;">
-                        <div class="usuario-logado">
-                            <p>✅ Você está logado como: <span id="email-usuario"></span></p>
-                        </div>
-                        <button id="btn-finalizar" class="btn-form">Finalizar Compra</button>
+                <!-- ÁREA DE PAGAMENTO SIMPLIFICADA -->
+                <div class="pagamento-simples">
+                    <div class="info-pagamento">
+                        <p>✅ Pronto para finalizar sua compra!</p>
+                        <ul>
+                            <li>Clique em "Pagar Agora" para simular o pagamento</li>
+                            <li>Você receberá uma confirmação do pedido</li>
+                            <li>O pedido será processado imediatamente</li>
+                            <li>Entrega estimada: 3-5 dias úteis</li>
+                        </ul>
                     </div>
 
-                    <!-- USUÁRIO NÃO LOGADO -->
-                    <div id="usuario-nao-logado">
-                        <!-- OPÇÕES INICIAIS -->
-                        <div id="opcoes-iniciais" class="opcoes-iniciais">
-                            <p>Faça login ou registre-se para finalizar sua compra:</p>
-                            <div class="botoes-opcoes">
-                                <button class="btn-opcao btn-login" id="btn-mostrar-login">Já tenho conta</button>
-                                <button class="btn-opcao btn-registro" id="btn-mostrar-registro">Criar conta</button>
-                            </div>
-                        </div>
-
-                        <!-- FORMULÁRIO DE LOGIN -->
-                        <div id="form-login" class="formulario">
-                            <div class="form-group">
-                                <label for="email-login">Email (Gmail)</label>
-                                <input type="email" id="email-login" placeholder="seu@gmail.com">
-                            </div>
-                            <div class="form-group">
-                                <label for="senha-login">Senha</label>
-                                <input type="password" id="senha-login" placeholder="••••••••">
-                            </div>
-                            <button id="btn-login" class="btn-form">Entrar</button>
-                            <button class="btn-voltar-form" id="btn-voltar-login">← Voltar</button>
-                        </div>
-
-                        <!-- FORMULÁRIO DE REGISTRO -->
-                        <div id="form-registro" class="formulario">
-                            <div class="form-group">
-                                <label for="email-registro">Email (Gmail)</label>
-                                <input type="email" id="email-registro" placeholder="seu@gmail.com">
-                            </div>
-                            <div class="form-group">
-                                <label for="senha-registro">Senha</label>
-                                <input type="password" id="senha-registro" placeholder="••••••••">
-                            </div>
-                            <div class="form-group">
-                                <label for="confirmar-senha">Confirmar Senha</label>
-                                <input type="password" id="confirmar-senha" placeholder="••••••••">
-                            </div>
-                            <button id="btn-registro" class="btn-form">Criar Conta</button>
-                            <button class="btn-voltar-form" id="btn-voltar-registro">← Voltar</button>
-                        </div>
-                    </div>
+                    <button id="btn-pagar" class="btn-pagar">
+                        💳 Pagar Agora
+                    </button>
                 </div>
             </div>
         </div>
@@ -505,7 +372,7 @@
     <div id="modal-confirmacao" class="modal-overlay">
         <div class="modal">
             <button class="modal-fechar" onclick="fecharModal()">×</button>
-            <h2 class="modal-titulo">✓ Pedido Confirmado!</h2>
+            <h2 class="modal-titulo">✅ Pagamento Confirmado!</h2>
             
             <div class="modal-info">
                 <p>Sua compra foi realizada com sucesso!</p>
@@ -513,24 +380,28 @@
 
             <div class="detalhes-pedido">
                 <p><strong>Número do Pedido:</strong><br>
-                <span id="numero-pedido" style="color: #10b981; font-weight: 600;">-</span></p>
+                <span id="numero-pedido" style="color: #10b981; font-weight: 600;">PED-${Date.now()}</span></p>
                 
-                <p><strong>Email:</strong><br>
-                <span id="email-confirmacao">-</span></p>
+                <p><strong>Data:</strong><br>
+                <span id="data-pedido">${new Date().toLocaleDateString('pt-BR')}</span></p>
                 
-                <p><strong>Total:</strong><br>
-                <span id="total-confirmacao" style="color: #10b981; font-weight: 600;">-</span></p>
+                <p><strong>Total Pago:</strong><br>
+                <span id="total-confirmacao" style="color: #10b981; font-weight: 600;">R$ 0,00</span></p>
+                
+                <p><strong>Status:</strong><br>
+                <span style="color: #10b981; font-weight: 600;">✅ Processando</span></p>
                 
                 <p style="font-size: 14px; color: #94a3b8; margin-top: 15px;">
-                    Você receberá um email de confirmação. O pedido será entregue em 3-5 dias úteis.
+                    Você receberá um email de confirmação em breve. 
+                    Acompanhe o status do seu pedido em "Meus Pedidos".
                 </p>
             </div>
 
-            <button class="btn-modal" onclick="voltarInicio()">Voltar para Início</button>
+            <button class="btn-modal" onclick="voltarInicio()">Voltar para Loja</button>
         </div>
     </div>
 
     <script src="carrinho.js"></script>
-    <script src="checkout.js"></script>
+    <script src="checkout-simples.js"></script>
 </body>
 </html>

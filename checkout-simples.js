@@ -1,165 +1,134 @@
-// Elementos
-const produtosCheckout = document.getElementById('produtos-checkout');
-const btnFinalizar = document.getElementById('btn-finalizar');
-const notificacao = document.getElementById('notificacao-checkout');
-const modalConfirmacao = document.getElementById('modal-confirmacao');
+// Elementos DOM
+const elementos = {
+    produtosLista: document.getElementById('produtos-lista'),
+    subtotal: document.getElementById('subtotal'),
+    frete: document.getElementById('frete'),
+    total: document.getElementById('total'),
+    btnPagar: document.getElementById('btn-pagar'),
+    modalConfirmacao: document.getElementById('modal-confirmacao'),
+    numeroPedido: document.getElementById('numero-pedido'),
+    dataPedido: document.getElementById('data-pedido'),
+    totalConfirmacao: document.getElementById('total-confirmacao')
+};
 
-// Campos
-const nomeUsuario = document.getElementById('nome-usuario');
-const emailGmail = document.getElementById('email-gmail');
-const senha = document.getElementById('senha');
-
-// Verificar carrinho
+// Inicializar
 document.addEventListener('DOMContentLoaded', () => {
-  if (carrinho.itens.length === 0) {
-    alert('Carrinho vazio!');
-    window.location.href = 'index.html';
-    return;
-  }
-
-  renderizarProdutos();
-  atualizarResumo();
+    console.log('Checkout simplificado carregado!');
+    
+    // Verificar se há produtos no carrinho
+    if (!carrinho || carrinho.itens.length === 0) {
+        alert('Carrinho vazio! Redirecionando para a loja...');
+        window.location.href = 'index.html';
+        return;
+    }
+    
+    // Carregar produtos e valores
+    carregarProdutos();
+    atualizarValores();
+    configurarEventos();
 });
 
-function renderizarProdutos() {
-  produtosCheckout.innerHTML = '';
-
-  carrinho.itens.forEach(item => {
-    const div = document.createElement('div');
-    div.className = 'produto-checkout';
-    div.innerHTML = `
-      <img src="${item.imagem}" alt="${item.nome}">
-      <div class="produto-checkout-info">
-        <div class="produto-checkout-nome">${item.nome}</div>
-        <div class="produto-checkout-preco">
-          ${item.quantidade}x R$ ${item.preco.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-        </div>
-      </div>
-      <div style="font-weight: 700; text-align: right;">
-        R$ ${(item.preco * item.quantidade).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-      </div>
-    `;
-    produtosCheckout.appendChild(div);
-  });
-}
-
-function atualizarResumo() {
-  const subtotal = carrinho.obterSubtotal();
-  const frete = carrinho.obterFrete();
-  const total = carrinho.obterTotal();
-
-  document.getElementById('resumo-subtotal').textContent = `R$ ${subtotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
-  document.getElementById('resumo-frete').textContent = frete === 0 ? 'Grátis' : `R$ ${frete.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
-  document.getElementById('resumo-total').textContent = `R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
-}
-
-// VALIDAR
-function validar() {
-  if (!nomeUsuario.value.trim()) {
-    mostrarNotif('Nome de usuário é obrigatório', 'erro');
-    nomeUsuario.focus();
-    return false;
-  }
-
-  if (nomeUsuario.value.trim().length < 3) {
-    mostrarNotif('Nome deve ter no mínimo 3 caracteres', 'erro');
-    nomeUsuario.focus();
-    return false;
-  }
-
-  if (!emailGmail.value.trim()) {
-    mostrarNotif('Email é obrigatório', 'erro');
-    emailGmail.focus();
-    return false;
-  }
-
-  if (!emailGmail.value.includes('@gmail.com')) {
-    mostrarNotif('Use um email Gmail válido (exemplo@gmail.com)', 'erro');
-    emailGmail.focus();
-    return false;
-  }
-
-  if (!senha.value) {
-    mostrarNotif('Senha é obrigatória', 'erro');
-    senha.focus();
-    return false;
-  }
-
-  if (senha.value.length < 6) {
-    mostrarNotif('Senha deve ter no mínimo 6 caracteres', 'erro');
-    senha.focus();
-    return false;
-  }
-
-  return true;
-}
-
-// FINALIZAR COMPRA
-btnFinalizar.addEventListener('click', () => {
-  if (!validar()) {
-    return;
-  }
-
-  btnFinalizar.disabled = true;
-  btnFinalizar.textContent = 'Processando...';
-
-  // Simular processamento
-  setTimeout(() => {
-    // Gerar número do pedido
-    const numeroPedido = 'PED-' + Date.now();
-    const total = carrinho.obterTotal();
-
-    // Pré-preencher modal
-    document.getElementById('numero-pedido').textContent = numeroPedido;
-    document.getElementById('confirmacao-email').textContent = emailGmail.value;
-    document.getElementById('confirmacao-total').textContent = `R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
-
-    // Salvar pedido
-    const pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
-    pedidos.push({
-      numero: numeroPedido,
-      usuario: nomeUsuario.value,
-      email: emailGmail.value,
-      itens: carrinho.itens,
-      total: total,
-      data: new Date().toLocaleString('pt-BR')
+// CARREGAR PRODUTOS DO CARRINHO
+function carregarProdutos() {
+    elementos.produtosLista.innerHTML = '';
+    
+    carrinho.itens.forEach(item => {
+        const itemTotal = item.preco * item.quantidade;
+        
+        const produtoHTML = `
+            <div class="produto-item">
+                <img src="${item.imagem}" alt="${item.nome}" class="produto-img">
+                <div class="produto-info">
+                    <div class="produto-nome">${item.nome}</div>
+                    <div class="produto-detalhes">
+                        ${item.quantidade}x R$ ${item.preco.toFixed(2).replace('.', ',')}
+                    </div>
+                </div>
+                <div class="produto-total">
+                    R$ ${itemTotal.toFixed(2).replace('.', ',')}
+                </div>
+            </div>
+        `;
+        
+        elementos.produtosLista.innerHTML += produtoHTML;
     });
-    localStorage.setItem('pedidos', JSON.stringify(pedidos));
-
-    // Limpar carrinho
-    carrinho.limpar();
-
-    // Mostrar modal
-    mostrarModal();
-
-    btnFinalizar.disabled = false;
-    btnFinalizar.textContent = 'Finalizar Compra';
-  }, 1500);
-});
-
-function mostrarNotif(msg, tipo = 'erro') {
-  notificacao.textContent = msg;
-  notificacao.className = `notificacao-checkout ativo`;
-
-  setTimeout(() => {
-    notificacao.className = 'notificacao-checkout';
-  }, 4000);
 }
 
-function mostrarModal() {
-  modalConfirmacao.classList.add('ativo');
+// ATUALIZAR VALORES DO CARRINHO
+function atualizarValores() {
+    if (!carrinho || !carrinho.obterSubtotal) {
+        console.error('Carrinho não carregado corretamente!');
+        return;
+    }
+    
+    const subtotal = carrinho.obterSubtotal();
+    const frete = carrinho.obterFrete ? carrinho.obterFrete() : 0;
+    const total = carrinho.obterTotal ? carrinho.obterTotal() : subtotal + frete;
+    
+    elementos.subtotal.textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+    elementos.frete.textContent = frete === 0 ? 'Grátis' : `R$ ${frete.toFixed(2).replace('.', ',')}`;
+    elementos.total.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+    
+    // Atualizar também no modal
+    elementos.totalConfirmacao.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
 }
 
-function fecharModal() {
-  modalConfirmacao.classList.remove('ativo');
+// CONFIGURAR EVENTOS
+function configurarEventos() {
+    console.log('Configurando eventos...');
+    
+    // Botão de pagamento
+    elementos.btnPagar.addEventListener('click', processarPagamento);
 }
 
-function voltarCarrinho() {
-  if (confirm('Deseja voltar? Os dados serão perdidos.')) {
-    window.location.href = 'index.html';
-  }
+// PROCESSAR PAGAMENTO
+function processarPagamento() {
+    console.log('Processando pagamento...');
+    
+    // Desabilitar botão
+    elementos.btnPagar.disabled = true;
+    elementos.btnPagar.classList.add('processando');
+    elementos.btnPagar.textContent = 'Processando pagamento...';
+    
+    // Simular processamento (3 segundos)
+    setTimeout(() => {
+        // Gerar número do pedido
+        const numeroPedido = 'PED-' + Date.now();
+        const dataAtual = new Date().toLocaleDateString('pt-BR');
+        const total = carrinho.obterTotal ? carrinho.obterTotal() : carrinho.obterSubtotal();
+        
+        // Atualizar modal
+        elementos.numeroPedido.textContent = numeroPedido;
+        elementos.dataPedido.textContent = dataAtual;
+        elementos.totalConfirmacao.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        
+        // Salvar pedido no localStorage (opcional)
+        salvarPedido(numeroPedido, total, dataAtual);
+        
+        // Limpar carrinho
+        if (carrinho.limpar) {
+            carrinho.limpar();
+        }
+        
+        // Mostrar modal de confirmação
+        mostrarModal();
+        
+        // Restaurar botão
+        elementos.btnPagar.disabled = false;
+        elementos.btnPagar.classList.remove('processando');
+        elementos.btnPagar.textContent = '💳 Pagar Agora';
+        
+    }, 3000);
 }
 
-function voltarInicio() {
-  window.location.href = 'index.html';
-}
+// SALVAR PEDIDO NO LOCALSTORAGE
+function salvarPedido(numero, total, data) {
+    try {
+        const pedidos = JSON.parse(localStorage.getItem('pedidos_pedalaria')) || [];
+        
+        pedidos.push({
+            numero: numero,
+            data: data,
+            total: total
+
+        
