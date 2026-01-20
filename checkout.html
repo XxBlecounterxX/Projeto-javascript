@@ -150,6 +150,7 @@
       font-size: 16px;
       width: 100%;
       transition: transform 0.2s;
+      margin-bottom: 12px;
     }
 
     .btn-pagar:hover {
@@ -184,6 +185,7 @@
       color: #fff;
       font-size: 14px;
       display: none;
+      margin-bottom: 16px;
     }
 
     .notificacao-checkout.ativo {
@@ -340,7 +342,14 @@
 
         <!-- SE USUÁRIO NÃO ESTIVER LOGADO -->
         <div id="usuario-nao-logado">
-          <p style="color: var(--muted); margin-bottom: 16px;">Faça login ou registre-se para finalizar sua compra:</p>
+          <!-- OPÇÕES INICIAIS -->
+          <div id="opcoes-iniciais">
+            <p style="color: var(--muted); margin-bottom: 16px;">Faça login ou registre-se para finalizar sua compra:</p>
+            <div class="login-options">
+              <button class="btn-login" onclick="mostrarLogin()">Já tenho conta</button>
+              <button class="btn-registro" onclick="mostrarRegistro()">Criar conta</button>
+            </div>
+          </div>
 
           <!-- FORMULÁRIO DE LOGIN -->
           <div id="form-login-checkout" style="display: none;">
@@ -355,16 +364,11 @@
             </div>
 
             <button id="btn-login-checkout" class="btn-pagar">Entrar</button>
-            <button class="btn-voltar" onclick="toggleForms()" style="width: 100%; margin-top: 8px;">← Voltar</button>
+            <button class="btn-voltar" onclick="voltarOpcoes()" style="width: 100%; margin-top: 8px;">← Voltar</button>
           </div>
 
           <!-- FORMULÁRIO DE REGISTRO -->
-          <div id="form-registro-checkout">
-            <div class="form-group-checkout">
-              <label for="nome-registro">Nome de Usuário</label>
-              <input type="text" id="nome-registro" placeholder="seu_nome">
-            </div>
-
+          <div id="form-registro-checkout" style="display: none;">
             <div class="form-group-checkout">
               <label for="email-registro">Email (Gmail)</label>
               <input type="email" id="email-registro" placeholder="seu@gmail.com">
@@ -381,12 +385,7 @@
             </div>
 
             <button id="btn-registro-checkout" class="btn-pagar">Criar Conta</button>
-          </div>
-
-          <!-- OPÇÕES DE LOGIN -->
-          <div class="login-options">
-            <button class="btn-login" onclick="mostrarLogin()">Já tenho conta</button>
-            <button class="btn-registro" onclick="mostrarRegistro()">Criar conta</button>
+            <button class="btn-voltar" onclick="voltarOpcoes()" style="width: 100%; margin-top: 8px;">← Voltar</button>
           </div>
         </div>
       </div>
@@ -406,7 +405,6 @@
 
       <div style="color: var(--muted); margin-bottom: 20px; line-height: 1.8;">
         <p><strong>Número do Pedido:</strong><br><span id="numero-pedido" style="color: var(--accent); font-weight: 600;">-</span></p>
-        <p><strong>Usuário:</strong><br><span id="confirmacao-usuario">-</span></p>
         <p><strong>Email:</strong><br><span id="confirmacao-email">-</span></p>
         <p><strong>Total:</strong><br><span id="confirmacao-total" style="color: var(--accent); font-weight: 600;">-</span></p>
         <p style="font-size: 14px; margin-top: 16px; color: rgba(255, 255, 255, 0.6);">Você receberá um email de confirmação. O pedido será entregue em 3-5 dias úteis.</p>

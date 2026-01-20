@@ -10,7 +10,8 @@ const usuarioNaoLogadoDiv = document.getElementById('usuario-nao-logado');
 const nomeUsuarioLogado = document.getElementById('nome-usuario-logado');
 const emailUsuarioLogado = document.getElementById('email-usuario-logado');
 
-// Formulários
+// Elementos de opções
+const opcoesIniciais = document.getElementById('opcoes-iniciais');
 const formLogin = document.getElementById('form-login-checkout');
 const formRegistro = document.getElementById('form-registro-checkout');
 
@@ -20,7 +21,6 @@ const senhaLogin = document.getElementById('senha-login');
 const btnLoginCheckout = document.getElementById('btn-login-checkout');
 
 // Campos de registro
-const nomeRegistro = document.getElementById('nome-registro');
 const emailRegistro = document.getElementById('email-registro');
 const senhaRegistro = document.getElementById('senha-registro');
 const confirmarSenha = document.getElementById('confirmar-senha');
@@ -96,25 +96,26 @@ function verificarAutenticacao() {
   }
 }
 
-// FUNÇÕES DE AUTENTICAÇÃO
+// FUNÇÕES DE NAVEGAÇÃO
 function mostrarLogin() {
+  opcoesIniciais.style.display = 'none';
   formLogin.style.display = 'block';
   formRegistro.style.display = 'none';
 }
 
 function mostrarRegistro() {
+  opcoesIniciais.style.display = 'none';
   formLogin.style.display = 'none';
   formRegistro.style.display = 'block';
 }
 
-function toggleForms() {
-  if (formLogin.style.display === 'block') {
-    mostrarRegistro();
-  } else {
-    mostrarLogin();
-  }
+function voltarOpcoes() {
+  opcoesIniciais.style.display = 'block';
+  formLogin.style.display = 'none';
+  formRegistro.style.display = 'none';
 }
 
+// LOGIN
 async function fazerLoginCheckout() {
   const email = emailLogin.value.trim();
   const senha = senhaLogin.value;
@@ -168,19 +169,14 @@ async function fazerLoginCheckout() {
   }
 }
 
+// REGISTRO
 async function fazerRegistroCheckout() {
-  const nome = nomeRegistro.value.trim();
   const email = emailRegistro.value.trim();
   const senha = senhaRegistro.value;
   const confirmar = confirmarSenha.value;
 
-  if (!nome || !email || !senha || !confirmar) {
+  if (!email || !senha || !confirmar) {
     mostrarNotif('Preencha todos os campos', 'erro');
-    return;
-  }
-
-  if (nome.length < 3) {
-    mostrarNotif('Nome deve ter no mínimo 3 caracteres', 'erro');
     return;
   }
 
@@ -209,7 +205,7 @@ async function fazerRegistroCheckout() {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        username: nome,
+        username: email.split('@')[0], // Usar parte do email como username
         email,
         password: senha
       })
@@ -258,7 +254,6 @@ async function finalizarCompra() {
 
     // Pré-preencher modal
     document.getElementById('numero-pedido').textContent = numeroPedido;
-    document.getElementById('confirmacao-usuario').textContent = username;
     document.getElementById('confirmacao-email').textContent = email;
     document.getElementById('confirmacao-total').textContent = `R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
 
@@ -313,4 +308,4 @@ function voltarInicio() {
 }
 
 // Inicializar
-mostrarRegistro(); // Mostrar formulário de registro por padrão
+voltarOpcoes(); // Mostrar opções iniciais por padrão
