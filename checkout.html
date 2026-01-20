@@ -1,380 +1,536 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Checkout • Pedalaria</title>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <style>
-    .checkout-container {
-      max-width: 800px;
-      margin: 60px auto;
-      padding: 20px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Pedalaria</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-    .card-checkout {
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
-      border-radius: 18px;
-      padding: 24px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      backdrop-filter: blur(6px);
-      margin-bottom: 20px;
-    }
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-    .section-title {
-      font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 16px;
-    }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-    .produto-checkout {
-      display: flex;
-      gap: 12px;
-      padding: 12px;
-      background: rgba(255, 255, 255, 0.02);
-      border-radius: 12px;
-      margin-bottom: 12px;
-    }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #334155;
+            margin-bottom: 30px;
+        }
 
-    .produto-checkout img {
-      width: 60px;
-      height: 60px;
-      object-fit: cover;
-      border-radius: 8px;
-    }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #10b981;
+        }
 
-    .produto-checkout-info {
-      flex: 1;
-    }
+        .logo-icon {
+            font-size: 32px;
+        }
 
-    .produto-checkout-nome {
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
+        .btn-voltar {
+            background: transparent;
+            border: 1px solid #475569;
+            color: #cbd5e1;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
 
-    .produto-checkout-preco {
-      color: var(--muted);
-      font-size: 14px;
-    }
+        .btn-voltar:hover {
+            border-color: #10b981;
+            color: #10b981;
+        }
 
-    .form-group-checkout {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+        }
 
-    .form-group-checkout label {
-      font-weight: 600;
-      font-size: 14px;
-      color: var(--muted);
-    }
+        .produtos-section, .pagamento-section {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 16px;
+            padding: 25px;
+            border: 1px solid #334155;
+        }
 
-    .form-group-checkout input {
-      padding: 12px;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(255, 255, 255, 0.03);
-      color: #fff;
-      font-family: 'Inter', sans-serif;
-      font-size: 14px;
-    }
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-    .form-group-checkout input:focus {
-      outline: none;
-      border-color: var(--accent);
-      background: rgba(255, 255, 255, 0.05);
-    }
+        .section-title::before {
+            content: "✓";
+            background: #10b981;
+            color: #0f172a;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
 
-    .resumo-pedido {
-      background: rgba(255, 255, 255, 0.02);
-      border-radius: 12px;
-      padding: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      margin-bottom: 16px;
-    }
+        .produto-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
 
-    .resumo-linha {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 8px;
-      font-size: 14px;
-      color: var(--muted);
-    }
+        .produto-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
 
-    .resumo-total {
-      display: flex;
-      justify-content: space-between;
-      padding-top: 12px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      font-size: 18px;
-      font-weight: 700;
-      color: #fff;
-    }
+        .produto-info {
+            flex: 1;
+        }
 
-    .btn-pagar {
-      background: var(--accent);
-      color: #042018;
-      border: none;
-      padding: 14px;
-      border-radius: 10px;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 16px;
-      width: 100%;
-      transition: transform 0.2s;
-      margin-bottom: 12px;
-    }
+        .produto-nome {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
 
-    .btn-pagar:hover {
-      transform: translateY(-2px);
-    }
+        .produto-detalhes {
+            color: #94a3b8;
+            font-size: 14px;
+        }
 
-    .btn-pagar:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
+        .produto-total {
+            font-weight: bold;
+            color: #10b981;
+        }
 
-    .btn-voltar {
-      background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: var(--muted);
-      padding: 12px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 600;
-      width: 100%;
-      transition: border-color 0.3s;
-    }
+        .resumo {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
 
-    .btn-voltar:hover {
-      border-color: var(--accent);
-    }
+        .resumo-linha {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #cbd5e1;
+        }
 
-    .notificacao-checkout {
-      padding: 12px 16px;
-      border-radius: 10px;
-      color: #fff;
-      font-size: 14px;
-      margin-bottom: 16px;
-      display: none;
-    }
+        .resumo-total {
+            border-top: 1px solid #475569;
+            padding-top: 15px;
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #10b981;
+        }
 
-    .notificacao-checkout.erro {
-      background: rgba(239, 68, 68, 0.1);
-      border-left: 4px solid #ef4444;
-      display: block;
-    }
+        /* ÁREA DE AUTENTICAÇÃO */
+        .auth-area {
+            margin-top: 20px;
+        }
 
-    .notificacao-checkout.sucesso {
-      background: rgba(16, 185, 129, 0.1);
-      border-left: 4px solid var(--accent);
-      display: block;
-    }
+        .notificacao {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+        }
 
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.7);
-      z-index: 100;
-      align-items: center;
-      justify-content: center;
-    }
+        .notificacao.erro {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid #ef4444;
+            color: #fca5a5;
+            display: block;
+        }
 
-    .modal-overlay.ativo {
-      display: flex;
-    }
+        .notificacao.sucesso {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid #10b981;
+            color: #a7f3d0;
+            display: block;
+        }
 
-    .modal-content {
-      max-width: 400px;
-      position: relative;
-    }
+        .usuario-logado {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid #10b981;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
 
-    .modal-fechar {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      background: none;
-      border: none;
-      font-size: 24px;
-      color: var(--muted);
-      cursor: pointer;
-    }
+        .usuario-logado p {
+            color: #10b981;
+            font-weight: 600;
+        }
 
-    .login-options {
-      display: flex;
-      gap: 12px;
-      margin-top: 16px;
-    }
+        .opcoes-iniciais {
+            text-align: center;
+            padding: 20px;
+        }
 
-    .login-options button {
-      flex: 1;
-      padding: 12px;
-      border-radius: 10px;
-      border: none;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 14px;
-    }
+        .opcoes-iniciais p {
+            color: #94a3b8;
+            margin-bottom: 20px;
+        }
 
-    .btn-login {
-      background: var(--accent);
-      color: #042018;
-    }
+        .botoes-opcoes {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
 
-    .btn-registro {
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
-    }
+        .btn-opcao {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
 
-    .usuario-info {
-      background: rgba(16, 185, 129, 0.1);
-      border-left: 4px solid var(--accent);
-      padding: 16px;
-      border-radius: 10px;
-      margin-bottom: 16px;
-    }
+        .btn-login {
+            background: #10b981;
+            color: #0f172a;
+        }
 
-    .usuario-info p {
-      margin: 0;
-      color: var(--accent);
-      font-weight: 600;
-    }
-  </style>
+        .btn-registro {
+            background: #475569;
+            color: #f8fafc;
+        }
+
+        .btn-opcao:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .formulario {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #cbd5e1;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid #475569;
+            border-radius: 8px;
+            color: #f8fafc;
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #10b981;
+        }
+
+        .btn-form {
+            width: 100%;
+            padding: 14px;
+            background: #10b981;
+            color: #0f172a;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .btn-form:hover {
+            background: #0da271;
+        }
+
+        .btn-form:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-voltar-form {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            border: 1px solid #475569;
+            color: #94a3b8;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .btn-voltar-form:hover {
+            border-color: #10b981;
+            color: #10b981;
+        }
+
+        /* MODAL DE CONFIRMAÇÃO */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal {
+            background: #1e293b;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid #334155;
+            position: relative;
+        }
+
+        .modal-fechar {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .modal-fechar:hover {
+            color: #f8fafc;
+        }
+
+        .modal-titulo {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #10b981;
+        }
+
+        .modal-info {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid #10b981;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .modal-info p {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .detalhes-pedido {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        .detalhes-pedido strong {
+            color: #e2e8f0;
+        }
+
+        .btn-modal {
+            width: 100%;
+            padding: 14px;
+            background: #10b981;
+            color: #0f172a;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .btn-modal:hover {
+            background: #0da271;
+        }
+
+        @media (max-width: 768px) {
+            .checkout-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .botoes-opcoes {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
-  <nav style="padding: 20px 28px; display: flex; align-items: center; justify-content: space-between;">
-    <div class="brand">
-      <div class="logo" aria-hidden="true">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M5 16a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm14 0a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM2 12h3l3-6h8l3 6h3"/>
-        </svg>
-      </div>
-      <span>Pedalaria</span>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <span class="logo-icon">🚴</span>
+                <span>Pedalaria</span>
+            </div>
+            <button class="btn-voltar" onclick="voltarCarrinho()">← Voltar ao Carrinho</button>
+        </header>
+
+        <div class="checkout-grid">
+            <!-- COLUNA ESQUERDA - PRODUTOS -->
+            <div class="produtos-section">
+                <h2 class="section-title">Seu Carrinho</h2>
+                <div id="produtos-lista"></div>
+            </div>
+
+            <!-- COLUNA DIREITA - PAGAMENTO -->
+            <div class="pagamento-section">
+                <h2 class="section-title">Resumo do Pedido</h2>
+                
+                <div class="resumo">
+                    <div class="resumo-linha">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">R$ 0,00</span>
+                    </div>
+                    <div class="resumo-linha">
+                        <span>Frete:</span>
+                        <span id="frete">Grátis</span>
+                    </div>
+                    <div class="resumo-total">
+                        <span>Total:</span>
+                        <span id="total">R$ 0,00</span>
+                    </div>
+                </div>
+
+                <!-- ÁREA DE AUTENTICAÇÃO -->
+                <div class="auth-area">
+                    <div id="notificacao" class="notificacao"></div>
+
+                    <!-- USUÁRIO LOGADO -->
+                    <div id="usuario-logado" style="display: none;">
+                        <div class="usuario-logado">
+                            <p>✅ Você está logado como: <span id="email-usuario"></span></p>
+                        </div>
+                        <button id="btn-finalizar" class="btn-form">Finalizar Compra</button>
+                    </div>
+
+                    <!-- USUÁRIO NÃO LOGADO -->
+                    <div id="usuario-nao-logado">
+                        <!-- OPÇÕES INICIAIS -->
+                        <div id="opcoes-iniciais" class="opcoes-iniciais">
+                            <p>Faça login ou registre-se para finalizar sua compra:</p>
+                            <div class="botoes-opcoes">
+                                <button class="btn-opcao btn-login" id="btn-mostrar-login">Já tenho conta</button>
+                                <button class="btn-opcao btn-registro" id="btn-mostrar-registro">Criar conta</button>
+                            </div>
+                        </div>
+
+                        <!-- FORMULÁRIO DE LOGIN -->
+                        <div id="form-login" class="formulario">
+                            <div class="form-group">
+                                <label for="email-login">Email (Gmail)</label>
+                                <input type="email" id="email-login" placeholder="seu@gmail.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="senha-login">Senha</label>
+                                <input type="password" id="senha-login" placeholder="••••••••">
+                            </div>
+                            <button id="btn-login" class="btn-form">Entrar</button>
+                            <button class="btn-voltar-form" id="btn-voltar-login">← Voltar</button>
+                        </div>
+
+                        <!-- FORMULÁRIO DE REGISTRO -->
+                        <div id="form-registro" class="formulario">
+                            <div class="form-group">
+                                <label for="email-registro">Email (Gmail)</label>
+                                <input type="email" id="email-registro" placeholder="seu@gmail.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="senha-registro">Senha</label>
+                                <input type="password" id="senha-registro" placeholder="••••••••">
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmar-senha">Confirmar Senha</label>
+                                <input type="password" id="confirmar-senha" placeholder="••••••••">
+                            </div>
+                            <button id="btn-registro" class="btn-form">Criar Conta</button>
+                            <button class="btn-voltar-form" id="btn-voltar-registro">← Voltar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <button class="btn-voltar" onclick="voltarCarrinho()" style="width: auto; padding: 8px 16px;">← Voltar</button>
-  </nav>
 
-  <div class="checkout-container">
-    <!-- CARRINHO -->
-    <div class="card-checkout">
-      <div class="section-title">Seu Carrinho</div>
-      <div id="produtos-checkout"></div>
+    <!-- MODAL DE CONFIRMAÇÃO -->
+    <div id="modal-confirmacao" class="modal-overlay">
+        <div class="modal">
+            <button class="modal-fechar" onclick="fecharModal()">×</button>
+            <h2 class="modal-titulo">✓ Pedido Confirmado!</h2>
+            
+            <div class="modal-info">
+                <p>Sua compra foi realizada com sucesso!</p>
+            </div>
+
+            <div class="detalhes-pedido">
+                <p><strong>Número do Pedido:</strong><br>
+                <span id="numero-pedido" style="color: #10b981; font-weight: 600;">-</span></p>
+                
+                <p><strong>Email:</strong><br>
+                <span id="email-confirmacao">-</span></p>
+                
+                <p><strong>Total:</strong><br>
+                <span id="total-confirmacao" style="color: #10b981; font-weight: 600;">-</span></p>
+                
+                <p style="font-size: 14px; color: #94a3b8; margin-top: 15px;">
+                    Você receberá um email de confirmação. O pedido será entregue em 3-5 dias úteis.
+                </p>
+            </div>
+
+            <button class="btn-modal" onclick="voltarInicio()">Voltar para Início</button>
+        </div>
     </div>
 
-    <!-- RESUMO -->
-    <div class="card-checkout">
-      <div class="section-title">Resumo do Pedido</div>
-      <div class="resumo-pedido">
-        <div class="resumo-linha">
-          <span>Subtotal:</span>
-          <span id="resumo-subtotal">R$ 0,00</span>
-        </div>
-        <div class="resumo-linha">
-          <span>Frete:</span>
-          <span id="resumo-frete">Grátis</span>
-        </div>
-        <div class="resumo-total">
-          <span>Total:</span>
-          <span id="resumo-total">R$ 0,00</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- AUTENTICAÇÃO -->
-    <div class="card-checkout">
-      <div class="section-title">Pagamento</div>
-
-      <div id="notificacao-checkout" class="notificacao-checkout"></div>
-
-      <!-- SE USUÁRIO JÁ ESTIVER LOGADO -->
-      <div id="usuario-logado" style="display: none;">
-        <div class="usuario-info">
-          <p>✅ Você está logado como: <span id="email-usuario-logado"></span></p>
-        </div>
-        <button id="btn-finalizar" class="btn-pagar">Finalizar Compra</button>
-      </div>
-
-      <!-- SE USUÁRIO NÃO ESTIVER LOGADO -->
-      <div id="usuario-nao-logado">
-        <!-- OPÇÕES INICIAIS -->
-        <div id="opcoes-iniciais">
-          <p style="color: var(--muted); margin-bottom: 16px;">Faça login ou registre-se para finalizar sua compra:</p>
-          <div class="login-options">
-            <button class="btn-login">Já tenho conta</button>
-            <button class="btn-registro">Criar conta</button>
-          </div>
-        </div>
-
-        <!-- FORMULÁRIO DE LOGIN -->
-        <div id="form-login-checkout" style="display: none;">
-          <div class="form-group-checkout">
-            <label for="email-login">Email (Gmail)</label>
-            <input type="email" id="email-login" placeholder="seu@gmail.com">
-          </div>
-
-          <div class="form-group-checkout">
-            <label for="senha-login">Senha</label>
-            <input type="password" id="senha-login" placeholder="••••••••">
-          </div>
-
-          <button id="btn-login-checkout" class="btn-pagar">Entrar</button>
-          <button class="btn-voltar" style="width: 100%; margin-top: 8px;">← Voltar</button>
-        </div>
-
-        <!-- FORMULÁRIO DE REGISTRO -->
-        <div id="form-registro-checkout" style="display: none;">
-          <div class="form-group-checkout">
-            <label for="email-registro">Email (Gmail)</label>
-            <input type="email" id="email-registro" placeholder="seu@gmail.com">
-          </div>
-
-          <div class="form-group-checkout">
-            <label for="senha-registro">Senha</label>
-            <input type="password" id="senha-registro" placeholder="••••••••">
-          </div>
-
-          <div class="form-group-checkout">
-            <label for="confirmar-senha">Confirmar Senha</label>
-            <input type="password" id="confirmar-senha" placeholder="••••••••">
-          </div>
-
-          <button id="btn-registro-checkout" class="btn-pagar">Criar Conta</button>
-          <button class="btn-voltar" style="width: 100%; margin-top: 8px;">← Voltar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL DE CONFIRMAÇÃO -->
-  <div id="modal-confirmacao" class="modal-overlay">
-    <div class="card-checkout">
-      <button class="modal-fechar" onclick="fecharModal()">✕</button>
-
-      <h2 style="text-align: center; margin-top: 0;">✓ Pedido Confirmado!</h2>
-
-      <div style="background: rgba(16, 185, 129, 0.1); border-left: 4px solid var(--accent); padding: 16px; border-radius: 10px; margin-bottom: 20px;">
-        <p style="margin: 0; color: var(--accent); font-weight: 600;">Sua compra foi realizada com sucesso!</p>
-      </div>
-
-      <div style="color: var(--muted); margin-bottom: 20px; line-height: 1.8;">
-        <p><strong>Número do Pedido:</strong><br><span id="numero-pedido" style="color: var(--accent); font-weight: 600;">-</span></p>
-        <p><strong>Email:</strong><br><span id="confirmacao-email">-</span></p>
-        <p><strong>Total:</strong><br><span id="confirmacao-total" style="color: var(--accent); font-weight: 600;">-</span></p>
-        <p style="font-size: 14px; margin-top: 16px; color: rgba(255, 255, 255, 0.6);">Você receberá um email de confirmação. O pedido será entregue em 3-5 dias úteis.</p>
-      </div>
-
-      <button class="btn-pagar" onclick="voltarInicio()">Voltar para Início</button>
-    </div>
-  </div>
-
-  <script src="carrinho.js"></script>
-  <script src="checkout-novo.js"></script>
+    <script src="carrinho.js"></script>
+    <script src="checkout.js"></script>
 </body>
 </html>
