@@ -9,18 +9,18 @@
   <link rel="stylesheet" href="styles.css">
   <style>
     .checkout-container {
-      max-width: 800px;
+      max-width: 1000px;
       margin: 60px auto;
       padding: 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
     }
 
-    .card-checkout {
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
-      border-radius: 18px;
-      padding: 24px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      backdrop-filter: blur(6px);
-      margin-bottom: 20px;
+    .checkout-column {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
     }
 
     .section-title {
@@ -44,6 +44,14 @@
       font-weight: 700;
     }
 
+    .card-checkout {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+      border-radius: 18px;
+      padding: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(6px);
+    }
+
     .produto-checkout {
       display: flex;
       gap: 12px;
@@ -62,6 +70,9 @@
 
     .produto-checkout-info {
       flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .produto-checkout-nome {
@@ -108,13 +119,12 @@
       border-radius: 12px;
       padding: 16px;
       border: 1px solid rgba(255, 255, 255, 0.06);
-      margin-bottom: 16px;
     }
 
     .resumo-linha {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
       font-size: 14px;
       color: var(--muted);
     }
@@ -140,7 +150,6 @@
       font-size: 16px;
       width: 100%;
       transition: transform 0.2s;
-      margin-bottom: 12px;
     }
 
     .btn-pagar:hover {
@@ -160,7 +169,6 @@
       border-radius: 10px;
       cursor: pointer;
       font-weight: 600;
-      width: 100%;
       transition: border-color 0.3s;
     }
 
@@ -175,7 +183,6 @@
       border-radius: 10px;
       color: #fff;
       font-size: 14px;
-      margin-bottom: 16px;
       display: none;
     }
 
@@ -255,6 +262,12 @@
       color: var(--accent);
       font-weight: 600;
     }
+
+    @media (max-width: 900px) {
+      .checkout-container {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
@@ -271,103 +284,110 @@
   </nav>
 
   <div class="checkout-container">
-    <!-- CARRINHO -->
-    <div class="card-checkout">
-      <div class="section-title">
-        <div class="step-number">1</div>
-        Seu Carrinho
+    <!-- COLUNA ESQUERDA - CARRINHO -->
+    <div class="checkout-column">
+      <!-- CARRINHO -->
+      <div class="card-checkout">
+        <div class="section-title">
+          <div class="step-number">1</div>
+          Seu Carrinho
+        </div>
+        <div id="produtos-checkout"></div>
       </div>
-      <div id="produtos-checkout"></div>
+
+      <!-- RESUMO -->
+      <div class="card-checkout">
+        <div class="section-title">
+          <div class="step-number">2</div>
+          Resumo do Pedido
+        </div>
+        <div class="resumo-pedido">
+          <div class="resumo-linha">
+            <span>Subtotal:</span>
+            <span id="resumo-subtotal">R$ 0,00</span>
+          </div>
+          <div class="resumo-linha">
+            <span>Frete:</span>
+            <span id="resumo-frete">Grátis</span>
+          </div>
+          <div class="resumo-total">
+            <span>Total:</span>
+            <span id="resumo-total">R$ 0,00</span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- RESUMO -->
-    <div class="card-checkout">
-      <div class="section-title">
-        <div class="step-number">2</div>
-        Resumo do Pedido
-      </div>
-      <div class="resumo-pedido">
-        <div class="resumo-linha">
-          <span>Subtotal:</span>
-          <span id="resumo-subtotal">R$ 0,00</span>
-        </div>
-        <div class="resumo-linha">
-          <span>Frete:</span>
-          <span id="resumo-frete">Grátis</span>
-        </div>
-        <div class="resumo-total">
-          <span>Total:</span>
-          <span id="resumo-total">R$ 0,00</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- AUTENTICAÇÃO -->
-    <div class="card-checkout">
-      <div class="section-title">
-        <div class="step-number">3</div>
-        Autenticação
-      </div>
-
-      <div id="notificacao-checkout" class="notificacao-checkout"></div>
-
-      <!-- SE USUÁRIO JÁ ESTIVER LOGADO -->
-      <div id="usuario-logado" style="display: none;">
-        <div class="usuario-info">
-          <p>✅ Você está logado como: <span id="nome-usuario-logado"></span></p>
-        </div>
-        <button id="btn-finalizar" class="btn-pagar">Finalizar Compra</button>
-      </div>
-
-      <!-- SE USUÁRIO NÃO ESTIVER LOGADO -->
-      <div id="usuario-nao-logado">
-        <p style="color: var(--muted); margin-bottom: 16px;">Faça login ou registre-se para finalizar sua compra:</p>
-
-        <!-- FORMULÁRIO DE LOGIN -->
-        <div id="form-login-checkout" style="display: none;">
-          <div class="form-group-checkout">
-            <label for="email-login">Email</label>
-            <input type="email" id="email-login" placeholder="seu@email.com">
-          </div>
-
-          <div class="form-group-checkout">
-            <label for="senha-login">Senha</label>
-            <input type="password" id="senha-login" placeholder="••••••••">
-          </div>
-
-          <button id="btn-login-checkout" class="btn-pagar">Entrar</button>
-          <button class="btn-voltar" onclick="toggleForms()">← Voltar</button>
+    <!-- COLUNA DIREITA - PAGAMENTO -->
+    <div class="checkout-column">
+      <!-- AUTENTICAÇÃO -->
+      <div class="card-checkout">
+        <div class="section-title">
+          <div class="step-number">3</div>
+          Pagamento
         </div>
 
-        <!-- FORMULÁRIO DE REGISTRO -->
-        <div id="form-registro-checkout">
-          <div class="form-group-checkout">
-            <label for="nome-registro">Nome de Usuário</label>
-            <input type="text" id="nome-registro" placeholder="seu_nome">
-          </div>
+        <div id="notificacao-checkout" class="notificacao-checkout"></div>
 
-          <div class="form-group-checkout">
-            <label for="email-registro">Email (Gmail)</label>
-            <input type="email" id="email-registro" placeholder="seu@gmail.com">
+        <!-- SE USUÁRIO JÁ ESTIVER LOGADO -->
+        <div id="usuario-logado" style="display: none;">
+          <div class="usuario-info">
+            <p>✅ Você está logado como: <span id="nome-usuario-logado"></span></p>
+            <p style="font-size: 14px; margin-top: 8px; color: rgba(255, 255, 255, 0.8);">Email: <span id="email-usuario-logado"></span></p>
           </div>
-
-          <div class="form-group-checkout">
-            <label for="senha-registro">Senha</label>
-            <input type="password" id="senha-registro" placeholder="••••••••">
-          </div>
-
-          <div class="form-group-checkout">
-            <label for="confirmar-senha">Confirmar Senha</label>
-            <input type="password" id="confirmar-senha" placeholder="••••••••">
-          </div>
-
-          <button id="btn-registro-checkout" class="btn-pagar">Criar Conta</button>
+          <button id="btn-finalizar" class="btn-pagar">Finalizar Compra</button>
         </div>
 
-        <!-- OPÇÕES DE LOGIN -->
-        <div class="login-options">
-          <button class="btn-login" onclick="mostrarLogin()">Já tenho conta</button>
-          <button class="btn-registro" onclick="mostrarRegistro()">Criar conta</button>
+        <!-- SE USUÁRIO NÃO ESTIVER LOGADO -->
+        <div id="usuario-nao-logado">
+          <p style="color: var(--muted); margin-bottom: 16px;">Faça login ou registre-se para finalizar sua compra:</p>
+
+          <!-- FORMULÁRIO DE LOGIN -->
+          <div id="form-login-checkout" style="display: none;">
+            <div class="form-group-checkout">
+              <label for="email-login">Email (Gmail)</label>
+              <input type="email" id="email-login" placeholder="seu@gmail.com">
+            </div>
+
+            <div class="form-group-checkout">
+              <label for="senha-login">Senha</label>
+              <input type="password" id="senha-login" placeholder="••••••••">
+            </div>
+
+            <button id="btn-login-checkout" class="btn-pagar">Entrar</button>
+            <button class="btn-voltar" onclick="toggleForms()" style="width: 100%; margin-top: 8px;">← Voltar</button>
+          </div>
+
+          <!-- FORMULÁRIO DE REGISTRO -->
+          <div id="form-registro-checkout">
+            <div class="form-group-checkout">
+              <label for="nome-registro">Nome de Usuário</label>
+              <input type="text" id="nome-registro" placeholder="seu_nome">
+            </div>
+
+            <div class="form-group-checkout">
+              <label for="email-registro">Email (Gmail)</label>
+              <input type="email" id="email-registro" placeholder="seu@gmail.com">
+            </div>
+
+            <div class="form-group-checkout">
+              <label for="senha-registro">Senha</label>
+              <input type="password" id="senha-registro" placeholder="••••••••">
+            </div>
+
+            <div class="form-group-checkout">
+              <label for="confirmar-senha">Confirmar Senha</label>
+              <input type="password" id="confirmar-senha" placeholder="••••••••">
+            </div>
+
+            <button id="btn-registro-checkout" class="btn-pagar">Criar Conta</button>
+          </div>
+
+          <!-- OPÇÕES DE LOGIN -->
+          <div class="login-options">
+            <button class="btn-login" onclick="mostrarLogin()">Já tenho conta</button>
+            <button class="btn-registro" onclick="mostrarRegistro()">Criar conta</button>
+          </div>
         </div>
       </div>
     </div>
@@ -386,6 +406,7 @@
 
       <div style="color: var(--muted); margin-bottom: 20px; line-height: 1.8;">
         <p><strong>Número do Pedido:</strong><br><span id="numero-pedido" style="color: var(--accent); font-weight: 600;">-</span></p>
+        <p><strong>Usuário:</strong><br><span id="confirmacao-usuario">-</span></p>
         <p><strong>Email:</strong><br><span id="confirmacao-email">-</span></p>
         <p><strong>Total:</strong><br><span id="confirmacao-total" style="color: var(--accent); font-weight: 600;">-</span></p>
         <p style="font-size: 14px; margin-top: 16px; color: rgba(255, 255, 255, 0.6);">Você receberá um email de confirmação. O pedido será entregue em 3-5 dias úteis.</p>
@@ -397,6 +418,6 @@
 
   <script src="auth.js"></script>
   <script src="carrinho.js"></script>
-  <script src="checkout-completo.js"></script>
+  <script src="checkout-final.js"></script>
 </body>
 </html>
