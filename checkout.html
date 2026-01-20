@@ -27,6 +27,21 @@
       font-size: 20px;
       font-weight: 700;
       margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      background: var(--accent);
+      color: #042018;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
     }
 
     .produto-checkout {
@@ -200,6 +215,46 @@
       color: var(--muted);
       cursor: pointer;
     }
+
+    .login-options {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .login-options button {
+      flex: 1;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .btn-login {
+      background: var(--accent);
+      color: #042018;
+    }
+
+    .btn-registro {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .usuario-info {
+      background: rgba(16, 185, 129, 0.1);
+      border-left: 4px solid var(--accent);
+      padding: 16px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+    }
+
+    .usuario-info p {
+      margin: 0;
+      color: var(--accent);
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
@@ -218,12 +273,19 @@
   <div class="checkout-container">
     <!-- CARRINHO -->
     <div class="card-checkout">
-      <div class="section-title">Seu Carrinho</div>
+      <div class="section-title">
+        <div class="step-number">1</div>
+        Seu Carrinho
+      </div>
       <div id="produtos-checkout"></div>
     </div>
 
     <!-- RESUMO -->
     <div class="card-checkout">
+      <div class="section-title">
+        <div class="step-number">2</div>
+        Resumo do Pedido
+      </div>
       <div class="resumo-pedido">
         <div class="resumo-linha">
           <span>Subtotal:</span>
@@ -240,28 +302,74 @@
       </div>
     </div>
 
-    <!-- DADOS DE PAGAMENTO -->
+    <!-- AUTENTICAÇÃO -->
     <div class="card-checkout">
-      <div class="section-title">Dados de Pagamento</div>
+      <div class="section-title">
+        <div class="step-number">3</div>
+        Autenticação
+      </div>
 
       <div id="notificacao-checkout" class="notificacao-checkout"></div>
 
-      <div class="form-group-checkout">
-        <label for="nome-usuario">Nome de Usuário</label>
-        <input type="text" id="nome-usuario" placeholder="seu_usuario">
+      <!-- SE USUÁRIO JÁ ESTIVER LOGADO -->
+      <div id="usuario-logado" style="display: none;">
+        <div class="usuario-info">
+          <p>✅ Você está logado como: <span id="nome-usuario-logado"></span></p>
+        </div>
+        <button id="btn-finalizar" class="btn-pagar">Finalizar Compra</button>
       </div>
 
-      <div class="form-group-checkout">
-        <label for="email-gmail">Email (Gmail)</label>
-        <input type="email" id="email-gmail" placeholder="seu@gmail.com">
-      </div>
+      <!-- SE USUÁRIO NÃO ESTIVER LOGADO -->
+      <div id="usuario-nao-logado">
+        <p style="color: var(--muted); margin-bottom: 16px;">Faça login ou registre-se para finalizar sua compra:</p>
 
-      <div class="form-group-checkout">
-        <label for="senha">Senha</label>
-        <input type="password" id="senha" placeholder="••••••••">
-      </div>
+        <!-- FORMULÁRIO DE LOGIN -->
+        <div id="form-login-checkout" style="display: none;">
+          <div class="form-group-checkout">
+            <label for="email-login">Email</label>
+            <input type="email" id="email-login" placeholder="seu@email.com">
+          </div>
 
-      <button id="btn-finalizar" class="btn-pagar">Finalizar Compra</button>
+          <div class="form-group-checkout">
+            <label for="senha-login">Senha</label>
+            <input type="password" id="senha-login" placeholder="••••••••">
+          </div>
+
+          <button id="btn-login-checkout" class="btn-pagar">Entrar</button>
+          <button class="btn-voltar" onclick="toggleForms()">← Voltar</button>
+        </div>
+
+        <!-- FORMULÁRIO DE REGISTRO -->
+        <div id="form-registro-checkout">
+          <div class="form-group-checkout">
+            <label for="nome-registro">Nome de Usuário</label>
+            <input type="text" id="nome-registro" placeholder="seu_nome">
+          </div>
+
+          <div class="form-group-checkout">
+            <label for="email-registro">Email (Gmail)</label>
+            <input type="email" id="email-registro" placeholder="seu@gmail.com">
+          </div>
+
+          <div class="form-group-checkout">
+            <label for="senha-registro">Senha</label>
+            <input type="password" id="senha-registro" placeholder="••••••••">
+          </div>
+
+          <div class="form-group-checkout">
+            <label for="confirmar-senha">Confirmar Senha</label>
+            <input type="password" id="confirmar-senha" placeholder="••••••••">
+          </div>
+
+          <button id="btn-registro-checkout" class="btn-pagar">Criar Conta</button>
+        </div>
+
+        <!-- OPÇÕES DE LOGIN -->
+        <div class="login-options">
+          <button class="btn-login" onclick="mostrarLogin()">Já tenho conta</button>
+          <button class="btn-registro" onclick="mostrarRegistro()">Criar conta</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -287,7 +395,8 @@
     </div>
   </div>
 
+  <script src="auth.js"></script>
   <script src="carrinho.js"></script>
-  <script src="checkout-simples.js"></script>
+  <script src="checkout-completo.js"></script>
 </body>
 </html>
